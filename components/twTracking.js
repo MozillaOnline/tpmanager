@@ -79,7 +79,7 @@ var fx21List = [
     "app.distributor",
     "app.distributor.channel",
     "app.partner.mozillataiwan",
-    "app.mozillataiwan.channel",
+    "app.taiwanedition.channel",
 ];
 
 function backupPref(){
