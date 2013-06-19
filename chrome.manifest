@@ -1,7 +1,11 @@
 content   twtracking         content/
+locale    twtracking  zh-TW  locale/zh-TW/
 overlay  chrome://browser/content/browser.xul   chrome://twtracking/content/overlay-browser.xul
 
 component {FC3083D5-9710-E28F-DCB2-90D258A93F9B} components/twTracking.js
 contract @mozilla.com.cn/twtracking;1 {FC3083D5-9710-E28F-DCB2-90D258A93F9B}
 category profile-after-change trackingFactoryClass @mozilla.com.cn/twtracking;1
+
+overlay  chrome://browser/content/browser.xul   chrome://twtracking/content/dataChoices/overlay-browser.xul
+overlay  chrome://browser/content/preferences/advanced.xul  chrome://twtracking/content/dataChoices/overlay-preferences.xul
 

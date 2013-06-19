@@ -8,7 +8,7 @@
 
   <Description about="urn:mozilla:install-manifest">
 		<em:id>tpmanager@mozillaonline.com</em:id>
-    <em:version>0.2.1</em:version>
+    <em:version>0.2.2</em:version>
     <em:name>Addons Manager</em:name>
     <em:description>To manage the addons package in Firefox.</em:description>
     <em:creator>Mozilla Online</em:creator>

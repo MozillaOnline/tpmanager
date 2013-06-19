@@ -18,6 +18,7 @@ const PK_PREF = "extensions.tpmanager@mozillaonline.com.uuid";
 const LOCALE_PREF = "general.useragent.locale";
 const CHANNEL_PREF = "app.taiwanedition.channel";
 const DISTRIBUTION_PREF = "distribution.version";
+const DATACHOICES_PREF = "extensions.tpmanager.tracking.enabled";
 
 
 //Cu.import("resource://gre/modules/Services.jsm");
@@ -54,6 +55,14 @@ function hasPref(name) {
   }
 }
 
+function getDataChoices() {
+  try {
+  	return Services.prefs.getBoolPref(DATACHOICES_PREF);
+  } catch (e) {
+  	return false;
+  }
+}
+
 function getPrefStr(name, defValue) {
   try {
   	return Services.prefs.getCharPref(name);
@@ -68,33 +77,6 @@ function setPrefStr(name, value) {
   } catch (e) {
   	Components.utils.reportError(e);
   }
-}
-
-const fx21Prefix = "fx21.";
-var fx21List = [
-    "distribution.about",
-    "distribution.id",
-    "distribution.version",
-    "mozilla.partner.id",
-    "app.distributor",
-    "app.distributor.channel",
-    "app.partner.mozillataiwan",
-    "app.taiwanedition.channel",
-];
-
-function backupPref(){
-  let backTimer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
-  backTimer.initWithCallback({
-    notify: function() {
-      fx21List.forEach(function(item){
-        var newItem = fx21Prefix + item;
-        if(hasPref(item)){
-          let value = getPrefStr(item,"");
-          setPrefStr(newItem,value);
-        }
-      });
-    }
-  }, 1000, Ci.nsITimer.TYPE_ONE_SHOT);
 }
 
 function generateUUID() {
@@ -273,14 +255,8 @@ function getMOExts() {
 function getADUData(){
 
   let channelidstr = "?channelid=";
-  if(hasPref(CHANNEL_PREF)){
-    let channelid = getPrefStr(CHANNEL_PREF,"www.myfirefox.com.tw");
-    channelidstr += channelid;
-  } else {
-    let channelid = getPrefStr(fx21Prefix + CHANNEL_PREF,"www.mozilla.com.tw");
-    channelidstr += channelid;
-    channelidstr += "&noid=true";
-  }
+  let channelid = getPrefStr(CHANNEL_PREF,"www.myfirefox.com.tw");
+  channelidstr += channelid;
 
   let pk = getPK();
   let uk = getUK();
@@ -329,6 +305,8 @@ function sendADU(index) {
 function _ADU(delay) {
   ADUTimer.initWithCallback({
     notify: function() {
+      if(!getDataChoices())
+        return;
       let str =  ADU_Task[ADUIndex].url + getADUData() + '&now=' + (new Date()).getTime();
       let xhr = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"]
                   .createInstance(Ci.nsIXMLHttpRequest);
@@ -368,6 +346,8 @@ trackingFactoryClass.prototype = {
   },
 
   sendUsageData: function() {
+    if(!getDataChoices())
+      return;
     let str = '';
     data = this.data
     for(let i in data) {
@@ -388,11 +368,12 @@ trackingFactoryClass.prototype = {
         Services.obs.addObserver(this, "final-ui-startup", true);
         let tracking_random = Math.random();
         let str = USAGE_URI + '?when=run';
+        if(!getDataChoices())
+          return;
         httpGet(str);
         break;
 
       case "final-ui-startup":
-        backupPref();
         sendADU(0);
         break;
       case "quit-application":

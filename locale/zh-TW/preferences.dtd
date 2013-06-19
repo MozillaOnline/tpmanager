@@ -1,0 +1,13 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!ENTITY % brandDTD
+    SYSTEM "chrome://branding/locale/brand.dtd">
+    %brandDTD;
+
+<!ENTITY trackingSection.label          "使用者體驗改善計畫">
+<!ENTITY trackingDesc.label             "為了進一步改善產品，提供您更好的上網體驗，我們將收集您使用 &brandShortName; 過程的非個人化資訊，並分析統計資料。">
+<!ENTITY enableTracking.label           "啟用使用者體驗改善計畫">
+<!ENTITY enableTracking.accesskey       "V">
+<!ENTITY trackingLearnMore.label        "更多資訊">
